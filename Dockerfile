@@ -12,12 +12,12 @@ RUN mvn clean package -DskipTests
 
 
 # Etapa 2: Imagen final
-FROM openjdk:17-jdk-slim
+FROM openjdk:21-jdk-slim
 
 WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8863
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

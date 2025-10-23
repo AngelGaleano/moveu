@@ -1,5 +1,6 @@
 # Etapa 1: Construcción con Maven
-FROM maven:3.8.6-jdk-17 AS build
+FROM maven:3.9.4-jdk-17 AS build
+
 WORKDIR /app
 
 COPY pom.xml .

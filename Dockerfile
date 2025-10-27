@@ -1,23 +1,20 @@
-# Etapa 1: Construcción del JAR
-FROM maven:3.9.4-eclipse-temurin-21 AS build
-
+# -----------------------
+# Etapa 1 - Compilar el JAR
+# -----------------------
+FROM maven:3.9.5-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
+RUN chmod +x mvnw || true
+COPY src ./src
+RUN ./mvnw -B clean package -DskipTests
 
-COPY . .
-
-# Establecer codificación para evitar errores con caracteres especiales
-ENV MAVEN_OPTS="-Dfile.encoding=UTF-8"
-
-RUN mvn clean package -DskipTests
-
-
-# Etapa 2: Imagen final
-FROM openjdk:21-jdk-slim
-
+# -----------------------
+# Etapa 2 - Ejecutar el JAR
+# -----------------------
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
-
 COPY --from=build /app/target/*.jar app.jar
-
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["sh","-c","java -jar /app/app.jar"]

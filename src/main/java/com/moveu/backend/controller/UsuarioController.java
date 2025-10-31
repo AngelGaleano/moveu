@@ -58,8 +58,8 @@ public class UsuarioController {
     ) {
         return usuarioRepository.findById(id).map(usuario -> {
             usuario.setNombre(body.getNombre());
-            usuario.setTelefono(body.getTelefono());             // ✅ teléfono
-            usuario.setIdentificacion(body.getIdentificacion()); // ✅ identificación
+            usuario.setTelefono(body.getTelefono());             
+            usuario.setIdentificacion(body.getIdentificacion()); 
 
             // Solo actualizar contraseña si viene no nula
             if (body.getPassword() != null && !body.getPassword().isEmpty()) {

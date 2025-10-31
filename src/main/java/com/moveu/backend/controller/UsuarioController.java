@@ -9,7 +9,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "*") // Permite llamadas desde Android, frontend web, etc.
+@CrossOrigin(origins = "*")
 public class UsuarioController {
 
     private final UsuarioRepository usuarioRepository;
@@ -37,14 +37,12 @@ public class UsuarioController {
     public ResponseEntity<Map<String, Object>> crearUsuario(@RequestBody Usuario usuario) {
         Map<String, Object> respuesta = new HashMap<>();
 
-        // Validar email único
         Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
         if (usuarioExistente.isPresent()) {
             respuesta.put("mensaje", "El correo ya está registrado.");
             return ResponseEntity.status(409).body(respuesta);
         }
 
-        // Guardar usuario
         Usuario nuevoUsuario = usuarioRepository.save(usuario);
         respuesta.put("mensaje", "Usuario registrado exitosamente.");
         respuesta.put("usuario", nuevoUsuario);
@@ -52,7 +50,7 @@ public class UsuarioController {
         return ResponseEntity.ok(respuesta);
     }
 
-    // ✅ Actualizar usuario
+    // Actualizar usuario (nombre, telefono, identificacion)
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Map<String, Object>> actualizarUsuario(
             @PathVariable Long id,
@@ -60,7 +58,13 @@ public class UsuarioController {
     ) {
         return usuarioRepository.findById(id).map(usuario -> {
             usuario.setNombre(body.getNombre());
-            usuario.setEmail(body.getEmail());
+            usuario.setTelefono(body.getTelefono());             // ✅ teléfono
+            usuario.setIdentificacion(body.getIdentificacion()); // ✅ identificación
+
+            // Solo actualizar contraseña si viene no nula
+            if (body.getPassword() != null && !body.getPassword().isEmpty()) {
+                usuario.setPassword(body.getPassword());
+            }
 
             Usuario actualizado = usuarioRepository.save(usuario);
 
@@ -76,7 +80,7 @@ public class UsuarioController {
         });
     }
 
-    // ✅ Eliminar usuario
+    // Eliminar usuario
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> eliminarUsuario(@PathVariable Long id) {
         Map<String, String> respuesta = new HashMap<>();
@@ -91,14 +95,13 @@ public class UsuarioController {
         }
     }
 
-    // ✅ Login (autenticación simple)
+    // Login simple
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> datos) {
         String email = datos.get("email");
         String password = datos.get("password");
 
         Map<String, Object> respuesta = new HashMap<>();
-
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
         if (usuarioOpt.isEmpty()) {
@@ -118,3 +121,4 @@ public class UsuarioController {
         return ResponseEntity.ok(respuesta);
     }
 }
+

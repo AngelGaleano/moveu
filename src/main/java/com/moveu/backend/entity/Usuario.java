@@ -17,19 +17,22 @@ public class Usuario {
 
     private String identificacion;
     private String telefono;
-
     private String password;
+
+    // 👇 Nuevo campo
+    private String horario;
 
     // ✅ Constructor vacío (requerido por JPA)
     public Usuario() {}
 
     // ✅ Constructor completo
-    public Usuario(String nombre, String email, String identificacion, String telefono, String password) {
+    public Usuario(String nombre, String email, String identificacion, String telefono, String password, String horario) {
         this.nombre = nombre;
         this.email = email;
         this.identificacion = identificacion;
         this.telefono = telefono;
         this.password = password;
+        this.horario = horario;
     }
 
     // ✅ Getters y Setters
@@ -50,4 +53,7 @@ public class Usuario {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getHorario() { return horario; }
+    public void setHorario(String horario) { this.horario = horario; }
 }

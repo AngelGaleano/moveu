@@ -22,10 +22,10 @@ public class Usuario {
     // 👇 Nuevo campo
     private String horario;
 
-    // ✅ Constructor vacío (requerido por JPA)
+    // Constructor vacío
     public Usuario() {}
 
-    // ✅ Constructor completo
+    // Constructor completo
     public Usuario(String nombre, String email, String identificacion, String telefono, String password, String horario) {
         this.nombre = nombre;
         this.email = email;
@@ -35,7 +35,7 @@ public class Usuario {
         this.horario = horario;
     }
 
-    // ✅ Getters y Setters
+    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -57,3 +57,4 @@ public class Usuario {
     public String getHorario() { return horario; }
     public void setHorario(String horario) { this.horario = horario; }
 }
+
